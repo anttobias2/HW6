@@ -1,0 +1,190 @@
+<!-- 
+    HW6 Starter code
+     Modified from: https://codepen.io/cathydutton/pen/GBcvo
+    -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HW6 - Anthony Tobias</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+         crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            var $seconds = 00; 
+            var $tens = 00; 
+            var $appendTens = $("#tens")
+            var $appendSeconds = $("#seconds")
+            var $buttonStart = $('#button-start');
+            var $buttonStop = $('#button-stop');
+            var $buttonReset = $('#button-reset');
+            var $timer = $("#timer");
+            var $interval;
+
+            // add class to timer and style
+            $timer.addClass("timer-background");
+            $timer.css({
+                color: "white",
+                backgroundColor: "grey",
+                "border-radius": "5px"
+            });
+
+            // add class to buttons and style
+            $buttonStart.addClass("button");
+            $buttonStop.addClass("button");
+            $buttonReset.addClass("button");
+
+
+            // styles dynamically added
+            $(".button").css({
+                borderRadius: "15px",
+                height: "40px",
+                width: "100px",
+                margin: "10px",
+                fontFamily: "Candara",
+            });
+
+            // style added to div
+            $("div").css({
+                fontFamily: "Candara",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                textAlign: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100vh"
+            });
+
+            // style added to buttons
+            $(".buttons").css({
+                flexDirection: "row",
+                marginTop: "0px",
+                height: "20vh",
+            });
+
+            // style added to p tag
+            $("p").css({
+                "width": "300px",
+            });
+
+            // color added to each button
+            $buttonStart.css("border-color", "green");
+            $buttonStop.css("border-color", "red");
+            $buttonReset.css("border-color", "grey");
+
+            // position the timer on screen
+            $(".wrapper").css({
+                position: "relative",
+                top: "-150px",
+            })
+
+            // add background image/theme to timer
+            $("body").css({
+                "background-image": "url(https://wallpapercave.com/wp/84I1azr.jpg)",
+                "background-size": "cover",
+            });
+
+            // change text color to white
+            $("h1").css("color", "white");
+
+            // add css to buttons on hover
+            $(".button").hover(function(e){
+                $(this).css("color",e.type === "mouseenter"?"white":"black");
+                $(this).css("transform",e.type === "mouseenter"?"scale(1.1)":"scale(1)");
+            });
+
+            // change color of each button on hover
+            $buttonStart.hover(function(e){$(this).css("background-color",e.type === "mouseenter"?"green":"white");});
+            $buttonStop.hover(function(e){$(this).css("background-color",e.type === "mouseenter"?"red":"white");});
+            $buttonReset.hover(function(e){$(this).css("background-color",e.type === "mouseenter"?"grey":"white");});
+
+            // start button is clicked
+            $buttonStart.on("click", () => {
+                clearInterval($interval);
+                $interval = setInterval(startTimer, 10);
+                $(".timer-background").css("backgroundColor", "green");
+                console.log("start")
+                changeOpacity();
+            });
+            
+            // stop button clicked
+            $buttonStop.on("click", () => {
+                clearInterval($interval);
+                if(!($seconds == "00" && $tens == "00")){
+                    $(".timer-background").css("backgroundColor", "red");
+                }
+                $(".timer-background").stop().fadeTo("slow", 1.0);
+            });
+
+            // reset button clicked
+            $buttonReset.on("click", () => {
+                clearInterval($interval);
+                $tens = "00";
+                $seconds = "00";
+                $appendTens.html($tens);
+                $appendSeconds.html($seconds);
+                $(".timer-background").css({"backgroundColor": "grey"});
+                $(".timer-background").stop().fadeTo("slow", 1.0);
+            });
+
+            // fade in and out function
+            function changeOpacity() {
+                var background = $(".timer-background");
+            
+                doFadeIn();
+                
+                function doFadeIn() {
+                    background.fadeTo("slow", 0.8, doFadeOut);
+                }
+            
+                function doFadeOut() {
+                    background.fadeTo("slow", 1.0, doFadeIn);
+                }
+            };
+
+            // how the timer works
+            function startTimer() {
+                $tens++;
+
+                if ($tens < 9) {
+                    $appendTens.html("0" + $tens);
+                }
+
+                if ($tens > 9) {
+                    $appendTens.html($tens);
+                }
+
+                if ($tens > 99) {
+                    console.log("seconds");
+                    $seconds++;
+                    $appendSeconds.html("0" + $seconds);
+                    $tens = 0;
+                    $appendTens.html("0" + 0);
+                }
+
+                if (seconds > 9) {
+                    $appendSeconds.html($seconds);
+                }
+            }
+        });
+    </script>
+
+</head>
+
+<body>
+    <div class="wrapper">
+        <h1>Stopwatch</h1>
+        <p id="timer"><span id="seconds">00</span>:<span id="tens">00</span></p>
+        <div class="buttons">
+            <button id="button-start">Start</button>
+            <button id="button-stop">Stop</button>
+            <button id="button-reset">Reset</button>
+        </div>
+    </div>
+</body>
+
+</html>
